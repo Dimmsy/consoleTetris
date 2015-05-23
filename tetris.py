@@ -10,9 +10,9 @@ def tetris():
 	w, h = 10, 14
 
 	#Symbols
-	global empty, block
+	global empty, fill
 	empty = '_'
-	block = 'O'
+	fill = 'O'
 
 	#Tetrinos
 	global s_block
@@ -24,23 +24,22 @@ def tetris():
 	for i in range(h):
 		staticField[i]=[empty]*10
 
-	#Create blocks
-	blocks = []
-	blocks.append(Tetrino())
+	#Create block
+	activeBlock = Tetrino()
 
 	#----------------
 	#---- Game Loop -
 	#----------------
 	while 1:
-		for b in blocks:
-			b.update()
-		dynamicField = updateField(staticField,blocks)
+		activeBlock.update()
+		dynamicField = updateField(staticField,activeBlock)
 		#print field to console
 		printField(dynamicField)
 		print ''
 		#wait a 'frame'
 		sleep(gameUpdateRate)
 
+################## CLASSES #################
 class Tetrino:
 	def __init__(self):
 		#Define shape
@@ -51,7 +50,9 @@ class Tetrino:
 	def update(self):
 		self.y += 1
 
-def updateField(field,blocks):
+################# FUNCTIONS ################
+	#Updates field with block position
+def updateField(field,block):
 	#Welp, gotta do this to copy over static field without editing it
 	outField = []
 	for i in range(h):
@@ -59,14 +60,13 @@ def updateField(field,blocks):
 		for j in range(w):
 			outField[i].append(field[i][j])
 			
-	for b in blocks:
-		#Draw field with block
-		for coord in b.shape:
-			if b.y+coord[1]>=0 and b.y+coord[1]<=h-1:
-				outField[b.y+coord[1]][b.x+coord[0]]=block
+	#Draw field with block
+	for coord in block.shape:
+		if block.y+coord[1]>=0 and block.y+coord[1]<=h-1:
+			outField[block.y+coord[1]][block.x+coord[0]]=fill
 	return outField
 	
-
+	# Prints field to console
 def printField(field):
 	for i in range(len(field)):
 		row = ''
@@ -74,6 +74,7 @@ def printField(field):
 			row = row+field[i][j]
 		print row
 
+################## Main function ###########
 if __name__ == '__main__':
 	tetris()
 
