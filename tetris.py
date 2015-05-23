@@ -23,6 +23,7 @@ def tetris():
 	while 1:
 		#print field to console
 		printField(field)
+		print ''
 		#wait a 'frame'
 		sleep(gameUpdateRate)
 
