@@ -15,8 +15,13 @@ def tetris():
 	fill = 'O'
 
 	#Tetrinos
-	global s_block
+	global blocks
+	
 	s_block = [[0,0],[1,0],[1,-1],[2,-1]]
+	sqr_block = [[0,0],[1,0],[0,1],[1,1]]
+	li_block = [[0,0],[1,0],[2,0],[3,0]]
+
+	blocks = [s_block,sqr_block,li_block]
 
 
 	#Create field
@@ -56,7 +61,7 @@ class Tetrino:
 	state = 'move' # 'froze' 'hit'
 	def __init__(self):
 		#Define shape
-		self.shape = s_block
+		self.shape = blocks[random.randrange(len(blocks))]
 		#spawn at top of board
 		self.x = 3
 		self.y = 0
