@@ -3,7 +3,7 @@ def tetris():
 	from time import sleep
 
 	#Game constants
-	gameUpdateRate = 1 #seconds between frames
+	gameUpdateRate = .1 #seconds between frames
 
 	#Field width and height
 	global w, h
@@ -31,8 +31,13 @@ def tetris():
 	#---- Game Loop -
 	#----------------
 	while 1:
-		activeBlock.update()
+		activeBlock.update(staticField)
 		dynamicField = updateField(staticField,activeBlock)
+
+		#If active block is frozen, add to static field
+		if activeBlock.state == 'froze':
+			staticField=updateField(staticField,activeBlock)
+			activeBlock = Tetrino()
 		#print field to console
 		printField(dynamicField)
 		print ''
@@ -41,14 +46,34 @@ def tetris():
 
 ################## CLASSES #################
 class Tetrino:
+	state = 'move' # 'froze' 'hit'
 	def __init__(self):
 		#Define shape
 		self.shape = s_block
 		#spawn at top of board
 		self.x = 3
 		self.y = 0
-	def update(self):
-		self.y += 1
+	def update(self,field):
+		#Check collision
+		self.collision(field)
+		print self.state
+		if self.state == 'move':
+			self.y += 1
+	def collision(self,field):
+		#Check collision below
+		for block in self.shape:
+			#Get pos of block
+			blockx = self.x+block[0]
+			blocky = self.y+block[1]
+			#check if at bottom
+			if blocky == h-1:
+				self.collide()
+			#check if above solid block
+			elif field[blocky+1][blockx] == fill:
+				self.collide()
+	def collide(self):
+		if self.state=='move': self.state='hit'
+		elif self.state=='hit': self.state='froze'
 
 ################# FUNCTIONS ################
 	#Updates field with block position
