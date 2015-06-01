@@ -1,7 +1,7 @@
-def tetris():
-	import random
-	from time import sleep
+import random
+from time import sleep
 
+def tetris():
 	#Game constants
 	gameUpdateRate = .1 #seconds between frames
 
@@ -17,11 +17,17 @@ def tetris():
 	#Tetrinos
 	global blocks
 	
-	s_block = [[0,0],[1,0],[1,-1],[2,-1]]
+	s_block = [[-1,0],[0,0],[0,-1],[1,-1]]
+	z_block = [[-1,1],[0,-1],[0,0],[0,1]]
 	sqr_block = [[0,0],[1,0],[0,1],[1,1]]
 	li_block = [[0,0],[1,0],[2,0],[3,0]]
+	t_block = [[0,0],[1,0],[2,0],[1,1]]
+	l_l_block = [[-1,-1],[-1,0],[0,0],[1,0]]
+	l_r_block =  [[1,-1],[-1,0],[0,0],[1,0]]
 
-	blocks = [s_block,sqr_block,li_block]
+	blocks = [s_block,s_block,
+				sqr_block,li_block,t_block,
+				l_l_block,l_r_block]
 
 
 	#Create field
