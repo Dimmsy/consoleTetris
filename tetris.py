@@ -14,20 +14,21 @@ def tetris():
 	empty = '_'
 	fill = 'O'
 
-	#Tetrinos
+	# ~~~~~ Tetrinos
 	global blocks
 	
 	s_block = [[-1,0],[0,0],[0,-1],[1,-1]]
 	z_block = [[-1,1],[0,-1],[0,0],[0,1]]
 	sqr_block = [[0,0],[1,0],[0,1],[1,1]]
 	li_block = [[0,0],[1,0],[2,0],[3,0]]
-	t_block = [[0,0],[1,0],[2,0],[1,1]]
+	t_block = [[-1,0],[0,0],[1,0],[0,1]]
 	l_l_block = [[-1,-1],[-1,0],[0,0],[1,0]]
 	l_r_block =  [[1,-1],[-1,0],[0,0],[1,0]]
 
 	blocks = [s_block,s_block,
 				sqr_block,li_block,t_block,
 				l_l_block,l_r_block]
+	# ~~~~~~~~
 
 
 	#Create field
@@ -69,7 +70,7 @@ class Tetrino:
 		#Define shape
 		self.shape = blocks[random.randrange(len(blocks))]
 		#spawn at top of board
-		self.x = 3
+		self.x = 4
 		self.y = 0
 	def update(self,field):
 		#Check collision
@@ -129,4 +130,3 @@ def printField(field):
 ################## Main function ###########
 if __name__ == '__main__':
 	tetris()
-
