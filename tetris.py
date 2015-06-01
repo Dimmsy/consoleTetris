@@ -36,8 +36,15 @@ def tetris():
 
 		#If active block is frozen, add to static field
 		if activeBlock.state == 'froze':
+			#Check for game over
+				#frozen tetrino is overlapping
+			if checkForFailure(staticField,activeBlock):
+				print 'Game over'
+				return
+
 			staticField=updateField(staticField,activeBlock)
 			activeBlock = Tetrino()
+			
 		#print field to console
 		printField(dynamicField)
 		print ''
@@ -91,6 +98,15 @@ def updateField(field,block):
 			outField[block.y+coord[1]][block.x+coord[0]]=fill
 	return outField
 	
+def checkForFailure(field,block):
+	for coord in block.shape:
+		blockx = block.x+coord[0]
+		blocky = block.y+coord[1]
+		if field[blocky][blockx]==fill:
+			return True
+
+	return False
+		
 	# Prints field to console
 def printField(field):
 	for i in range(len(field)):
