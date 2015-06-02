@@ -45,7 +45,7 @@ def tetris():
 	#----------------
 	while 1:
 		#Debug: random move in x
-		#activeBlock.moveInX(random.randrange(-3,4), staticField)
+		activeBlock.moveInX(random.randrange(-3,4), staticField)
 		activeBlock.rotate('cw',staticField)
 
 		activeBlock.update(staticField)
@@ -85,14 +85,30 @@ class Tetrino:
 			self.y += 1
 	def rotate(self,direc,field):
 		#direc = cw, ccw
+		if self.shape == sqr_block: return
 		if direc == 'cw':
+			newShape = []
 			for i in range(len(self.shape)):
 				#x' = -y
-				curX=self.shape[i][1]
-				curY=self.shape[i][0]
+				curX=self.shape[i][0]
+				curY=self.shape[i][1]
 
-				self.shape[i][0] = -curX
-				self.shape[i][1] = curY
+				newX=-curY
+				newY=curX
+
+				newShape.append([newX,newY])
+		if not self.collisionAnywhere(newShape,field):
+			self.shape = newShape
+	def collisionAnywhere(self,block,field):
+		for b in block:
+			if self.x+b[0] == w or self.x+b[0] < 0:
+				return True
+			elif self.y+b[1] >= h:
+				return True
+			elif self.x+b[0] >0 and self.y+b[1] >0:
+				if field[self.y+b[1]][self.x+b[0]]==fill:
+					return True
+		return False
 
 	def moveInX(self,move,field):
 		if move == 0: return
