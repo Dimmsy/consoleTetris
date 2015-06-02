@@ -46,7 +46,8 @@ def tetris():
 	while 1:
 		#Debug: random move in x
 		activeBlock.moveInX(random.randrange(-3,4), staticField)
-		activeBlock.rotate('cw',staticField)
+		if random.randrange(0,4)==1:
+			activeBlock.rotate('cw',staticField)
 
 		activeBlock.update(staticField)
 		dynamicField = updateField(staticField,activeBlock)
@@ -98,14 +99,16 @@ class Tetrino:
 
 				newShape.append([newX,newY])
 		if not self.collisionAnywhere(newShape,field):
-			self.shape = newShape
+			for i in range(len(newShape)):
+				self.shape[i] = newShape[i]
+			self.state = 'move'
 	def collisionAnywhere(self,block,field):
 		for b in block:
 			if self.x+b[0] == w or self.x+b[0] < 0:
 				return True
 			elif self.y+b[1] >= h:
 				return True
-			elif self.x+b[0] >0 and self.y+b[1] >0:
+			elif self.x+b[0] >=0 and self.x+b[0]>w and self.y+b[1] >0:
 				if field[self.y+b[1]][self.x+b[0]]==fill:
 					return True
 		return False
@@ -165,9 +168,9 @@ def checkForFailure(field,block):
 	for coord in block.shape:
 		blockx = block.x+coord[0]
 		blocky = block.y+coord[1]
-		if field[blocky][blockx]==fill:
-			return True
-
+		if blockx >=0 and blockx < w and blocky >=0:
+			if field[blocky][blockx]==fill:
+				return True
 	return False
 		
 	# Prints field to console
