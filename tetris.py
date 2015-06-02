@@ -45,9 +45,9 @@ def tetris():
 	#----------------
 	while 1:
 		#Debug: random move in x
-		#activeBlock.moveInX(random.randrange(-3,4), staticField)
+		activeBlock.moveInX(random.randrange(-3,4), staticField)
 		if random.randrange(0,4)==1:
-			activeBlock.rotate('cw',staticField)
+			activeBlock.rotate('ccw',staticField)
 
 		activeBlock.update(staticField)
 		dynamicField = updateField(staticField,activeBlock)
@@ -89,28 +89,29 @@ class Tetrino:
 	def rotate(self,direc,field):
 		#direc = cw, ccw
 		if self.shape == sqr_block: return
-		if direc == 'cw':
-			newShape = []
-			for i in range(len(self.shape)):
-				#x' = -y
-				curX=self.shape[i][0]
-				curY=self.shape[i][1]
-
+		newShape = []
+		for i in range(len(self.shape)):
+			curX=self.shape[i][0]
+			curY=self.shape[i][1]
+			if direc=='cw':
 				newX=-curY
 				newY=curX
+			elif direc=='ccw':
+				newX=curY
+				newY=-curX
 
-				newShape.append([newX,newY])
+			newShape.append([newX,newY])
 		if not self.collisionAnywhere(newShape,field):
 			for i in range(len(newShape)):
 				self.shape[i] = newShape[i]
 			self.state = 'move'
 	def collisionAnywhere(self,block,field):
 		for b in block:
-			if self.x+b[0] == w or self.x+b[0] < 0:
+			if self.x+b[0] >= w or self.x+b[0] < 0:
 				return True
 			elif self.y+b[1] >= h:
 				return True
-			elif self.x+b[0] >=0 and self.x+b[0]>w and self.y+b[1] >0:
+			elif self.x+b[0] >=0 and self.x+b[0]<w and self.y+b[1] >0:
 				if field[self.y+b[1]][self.x+b[0]]==fill:
 					return True
 		return False
@@ -122,6 +123,7 @@ class Tetrino:
 		for _ in range(abs(move)):
 			if not self.collisionSide(inc,field):
 				self.x += inc
+				self.state='move'
 	def collisionSide(self,move,field):
 		for block in self.shape:
 			#Get pos of block
@@ -144,12 +146,14 @@ class Tetrino:
 			if blocky == h:
 				return True
 			#check if above solid block
-			elif blocky < 0: 
+			elif blocky < h: 
 				if field[blocky][blockx] == fill:
 					return True
 	def collideBelow(self):
 		if self.state=='move': self.state='hit'
-		elif self.state=='hit': self.state='froze'
+		elif self.state=='hit': 
+			self.state='froze'
+	
 
 ################# FUNCTIONS ################
 	#Updates field with block position
