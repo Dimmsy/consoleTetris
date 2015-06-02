@@ -47,7 +47,10 @@ def tetris():
 		#Debug: random move in x
 		activeBlock.moveInX(random.randrange(-3,4), staticField)
 		if random.randrange(0,4)==1:
-			activeBlock.rotate('ccw',staticField)
+			rotateDirec = 'cw'
+			if random.randrange(0,2)==1:rotateDirec='ccw'
+
+			activeBlock.rotate(rotateDirec,staticField)
 
 		activeBlock.update(staticField)
 		dynamicField = updateField(staticField,activeBlock)
@@ -61,6 +64,7 @@ def tetris():
 				return
 
 			staticField=updateField(staticField,activeBlock)
+			staticField=clearLines(staticField)
 			activeBlock = Tetrino()
 			
 		#print field to console
@@ -156,6 +160,17 @@ class Tetrino:
 	
 
 ################# FUNCTIONS ################
+def clearLines(field):
+	rowsToClear=[]
+	for i in range(len(field)):
+		if field[i] == [fill]*w:
+			#clear out row... hmm
+			rowsToClear.append(i)
+	for ndx in rowsToClear:
+		field.insert(0,[empty]*w)
+		field.pop(i)
+	return field
+
 	#Updates field with block position
 def updateField(field,block):
 	#Welp, gotta do this to copy over static field without editing it
