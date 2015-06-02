@@ -16,11 +16,12 @@ def tetris():
 
 	# ~~~~~ Tetrinos
 	global blocks
+	global sqr_block
 	
 	s_block = [[-1,0],[0,0],[0,-1],[1,-1]]
 	z_block = [[-1,1],[0,-1],[0,0],[0,1]]
 	sqr_block = [[0,0],[1,0],[0,1],[1,1]]
-	li_block = [[0,0],[1,0],[2,0],[3,0]]
+	li_block = [[-1,0],[0,0],[1,0],[2,0]]
 	t_block = [[-1,0],[0,0],[1,0],[0,1]]
 	l_l_block = [[-1,-1],[-1,0],[0,0],[1,0]]
 	l_r_block =  [[1,-1],[-1,0],[0,0],[1,0]]
@@ -43,7 +44,10 @@ def tetris():
 	#---- Game Loop -
 	#----------------
 	while 1:
-		activeBlock.moveInX(random.randrange(-1,2), staticField)
+		#Debug: random move in x
+		#activeBlock.moveInX(random.randrange(-3,4), staticField)
+		activeBlock.rotate('cw',staticField)
+
 		activeBlock.update(staticField)
 		dynamicField = updateField(staticField,activeBlock)
 
@@ -79,10 +83,24 @@ class Tetrino:
 		print self.state
 		if self.state == 'move':
 			self.y += 1
+	def rotate(self,direc,field):
+		#direc = cw, ccw
+		if direc == 'cw':
+			for i in range(len(self.shape)):
+				#x' = -y
+				curX=self.shape[i][1]
+				curY=self.shape[i][0]
+
+				self.shape[i][0] = -curX
+				self.shape[i][1] = curY
+
 	def moveInX(self,move,field):
-		#move is -1,1
-		if not self.collisionSide(move,field):
-			self.x += move
+		if move == 0: return
+		#inc is -1,1
+		inc = move/abs(move)
+		for _ in range(abs(move)):
+			if not self.collisionSide(inc,field):
+				self.x += inc
 	def collisionSide(self,move,field):
 		for block in self.shape:
 			#Get pos of block
