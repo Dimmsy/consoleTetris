@@ -5,6 +5,10 @@ def tetris():
 	#Game constants
 	gameUpdateRate = .1 #seconds between frames
 
+	global SCORE
+
+	SCORE=0
+
 	#Field width and height
 	global w, h
 	w, h = 10, 14
@@ -60,7 +64,7 @@ def tetris():
 			#Check for game over
 				#frozen tetrino is overlapping
 			if checkForFailure(staticField,activeBlock):
-				print 'Game over'
+				print 'Game over. Score: {}'.format(SCORE)
 				return
 
 			staticField=updateField(staticField,activeBlock)
@@ -161,6 +165,8 @@ class Tetrino:
 
 ################# FUNCTIONS ################
 def clearLines(field):
+	global SCORE
+
 	rowsToClear=[]
 	for i in range(len(field)):
 		if field[i] == [fill]*w:
@@ -169,6 +175,7 @@ def clearLines(field):
 	for ndx in rowsToClear:
 		field.insert(0,[empty]*w)
 		field.pop(i)
+		SCORE+=1
 	return field
 
 	#Updates field with block position
