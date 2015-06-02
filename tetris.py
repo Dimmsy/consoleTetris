@@ -45,7 +45,7 @@ def tetris():
 	#----------------
 	while 1:
 		#Debug: random move in x
-		activeBlock.moveInX(random.randrange(-3,4), staticField)
+		#activeBlock.moveInX(random.randrange(-3,4), staticField)
 		if random.randrange(0,4)==1:
 			activeBlock.rotate('cw',staticField)
 
@@ -80,10 +80,12 @@ class Tetrino:
 		self.y = 0
 	def update(self,field):
 		#Check collision
-		self.collisionBelow(field)
 		print self.state
-		if self.state == 'move':
-			self.y += 1
+		self.moveDown(field)
+	def moveDown(self,field):
+		if not self.collisionBelow(1,field) and self.state == 'move':
+			self.y+=1
+		else: self.collideBelow()
 	def rotate(self,direc,field):
 		#direc = cw, ccw
 		if self.shape == sqr_block: return
@@ -132,18 +134,19 @@ class Tetrino:
 			elif field[blocky][blockx+move] == fill:
 				return True
 		return False
-	def collisionBelow(self,field):
+	def collisionBelow(self,move,field):
 		#Check collision below
 		for block in self.shape:
 			#Get pos of block
 			blockx = self.x+block[0]
-			blocky = self.y+block[1]
+			blocky = self.y+block[1]+move
 			#check if at bottom
-			if blocky == h-1:
-				self.collideBelow()
+			if blocky == h:
+				return True
 			#check if above solid block
-			elif field[blocky+1][blockx] == fill:
-				self.collideBelow()
+			elif blocky < 0: 
+				if field[blocky][blockx] == fill:
+					return True
 	def collideBelow(self):
 		if self.state=='move': self.state='hit'
 		elif self.state=='hit': self.state='froze'
