@@ -75,7 +75,9 @@ def tetris():
 		printField(dynamicField)
 		print ''
 		#wait a 'frame'
-		sleep(gameUpdateRate)
+		#sleep(gameUpdateRate)
+		#wait for input
+		frameCommand = input('Input: ')
 
 ################## CLASSES #################
 class Tetrino:
