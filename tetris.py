@@ -47,14 +47,22 @@ def tetris():
 	#----------------
 	#---- Game Loop -
 	#----------------
+	frameCommand = ''
 	while 1:
 		#Debug: random move in x
-		activeBlock.moveInX(random.randrange(-3,4), staticField)
-		if random.randrange(0,4)==1:
-			rotateDirec = 'cw'
-			if random.randrange(0,2)==1:rotateDirec='ccw'
+		#activeBlock.moveInX(random.randrange(-3,4), staticField)
+		#if random.randrange(0,4)==1:
+		#	rotateDirec = 'cw'
+		#	if random.randrange(0,2)==1:rotateDirec='ccw'
 
-			activeBlock.rotate(rotateDirec,staticField)
+		#	activeBlock.rotate(rotateDirec,staticField)
+		
+		## Read input
+		for charac in frameCommand:
+			if charac == 'l': activeBlock.moveInX(1, staticField)
+			elif charac == 'a': activeBlock.moveInX(-1, staticField)
+			elif charac == 'p': activeBlock.rotate('cw',staticField)
+			elif charac == 'q': activeBlock.rotate('ccw',staticField)
 
 		activeBlock.update(staticField)
 		dynamicField = updateField(staticField,activeBlock)
@@ -77,7 +85,7 @@ def tetris():
 		#wait a 'frame'
 		#sleep(gameUpdateRate)
 		#wait for input
-		frameCommand = input('Input: ')
+		frameCommand = raw_input('Input: ')
 
 ################## CLASSES #################
 class Tetrino:
@@ -168,18 +176,41 @@ class Tetrino:
 ################# FUNCTIONS ################
 def clearLines(field):
 	global SCORE
+	#Welp, gotta do this to copy over static field without editing it
+#	outField = []
+#	for i in range(h):
+#		outField.append([])
+#		for j in range(w):
+#			outField[i].append(field[i][j])
 
 	rowsToClear=[]
 	for i in range(len(field)):
 		if field[i] == [fill]*w:
 			#clear out row... hmm
 			rowsToClear.append(i)
-	for ndx in rowsToClear:
-		field.insert(0,[empty]*w)
-		field.pop(i)
-		SCORE+=1
-	return field
 
+	print 'Rows to clear: '
+	print rowsToClear
+	#if len(rowsToClear)>0:
+	offset = 0
+	outField=[]
+	for i in range(len(field)+len(rowsToClear)):
+		if i < len(rowsToClear):
+			outField.append([empty]*w)
+			offset +=1
+		elif i-offset in rowsToClear:
+			next
+		else:
+			outField.append(field[i-offset])
+	print len(outField)
+	return outField
+	#for ndx in rowsToClear:
+		#print 'popping ndx {}'.format(ndx)
+		#outField.pop(i)
+		#outField.insert(0,[empty]*w)
+		#print 'Board height after insert: {}'.format(len(field))
+		#SCORE+=1
+	#return field
 	#Updates field with block position
 def updateField(field,block):
 	#Welp, gotta do this to copy over static field without editing it
