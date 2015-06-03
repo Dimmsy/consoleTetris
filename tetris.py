@@ -176,12 +176,6 @@ class Tetrino:
 ################# FUNCTIONS ################
 def clearLines(field):
 	global SCORE
-	#Welp, gotta do this to copy over static field without editing it
-#	outField = []
-#	for i in range(h):
-#		outField.append([])
-#		for j in range(w):
-#			outField[i].append(field[i][j])
 
 	rowsToClear=[]
 	for i in range(len(field)):
@@ -191,7 +185,8 @@ def clearLines(field):
 
 	print 'Rows to clear: '
 	print rowsToClear
-	#if len(rowsToClear)>0:
+
+	#And here we construct a new field!
 	offset = 0
 	outField=[]
 	for i in range(len(field)+len(rowsToClear)):
@@ -204,13 +199,7 @@ def clearLines(field):
 			outField.append(field[i-offset])
 	print len(outField)
 	return outField
-	#for ndx in rowsToClear:
-		#print 'popping ndx {}'.format(ndx)
-		#outField.pop(i)
-		#outField.insert(0,[empty]*w)
-		#print 'Board height after insert: {}'.format(len(field))
-		#SCORE+=1
-	#return field
+
 	#Updates field with block position
 def updateField(field,block):
 	#Welp, gotta do this to copy over static field without editing it
