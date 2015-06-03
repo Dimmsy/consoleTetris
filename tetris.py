@@ -63,6 +63,10 @@ def tetris():
 			elif charac == 'a': activeBlock.moveInX(-1, staticField)
 			elif charac == 'p': activeBlock.rotate('cw',staticField)
 			elif charac == 'q': activeBlock.rotate('ccw',staticField)
+			elif charac == 'd': activeBlock.moveDown(1, staticField)
+			elif charac == 'D': 
+				activeBlock.moveDown(h, staticField)
+				activeBlock.state = 'froze'
 
 		activeBlock.update(staticField)
 		dynamicField = updateField(staticField,activeBlock)
@@ -99,11 +103,14 @@ class Tetrino:
 	def update(self,field):
 		#Check collision
 		print self.state
-		self.moveDown(field)
-	def moveDown(self,field):
-		if not self.collisionBelow(1,field) and self.state == 'move':
-			self.y+=1
-		else: self.collideBelow()
+		self.moveDown(1,field)
+	def moveDown(self,move,field):
+		for _ in range(move):
+			if not self.collisionBelow(1,field) and self.state == 'move':
+				self.y+=1
+			else: 
+				self.collideBelow()
+				return
 	def rotate(self,direc,field):
 		#direc = cw, ccw
 		if self.shape == sqr_block: return
