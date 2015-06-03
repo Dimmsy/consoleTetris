@@ -49,14 +49,6 @@ def tetris():
 	#----------------
 	frameCommand = ''
 	while 1:
-		#Debug: random move in x
-		#activeBlock.moveInX(random.randrange(-3,4), staticField)
-		#if random.randrange(0,4)==1:
-		#	rotateDirec = 'cw'
-		#	if random.randrange(0,2)==1:rotateDirec='ccw'
-
-		#	activeBlock.rotate(rotateDirec,staticField)
-		
 		## Read input
 		for charac in frameCommand:
 			if charac == 'l': activeBlock.moveInX(1, staticField)
@@ -102,7 +94,6 @@ class Tetrino:
 		self.y = 0
 	def update(self,field):
 		#Check collision
-		print self.state
 		self.moveDown(1,field)
 	def moveDown(self,move,field):
 		for _ in range(move):
@@ -190,9 +181,6 @@ def clearLines(field):
 			#clear out row... hmm
 			rowsToClear.append(i)
 
-	print 'Rows to clear: '
-	print rowsToClear
-
 	#And here we construct a new field!
 	offset = 0
 	outField=[]
@@ -204,7 +192,6 @@ def clearLines(field):
 			next
 		else:
 			outField.append(field[i-offset])
-	print len(outField)
 	return outField
 
 	#Updates field with block position
